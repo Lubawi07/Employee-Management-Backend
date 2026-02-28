@@ -2,11 +2,14 @@
 
 namespace App\Filament\Resources\Employees\Tables;
 
+use App\Filament\Exports\EmployeesExporter;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ExportAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class EmployeesTable
@@ -14,6 +17,11 @@ class EmployeesTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->headerActions([
+                ExportAction::make()
+                    ->exporter(EmployeesExporter::class)
+                    ->label('Export Karyawan')
+            ])
             ->columns([
                 TextColumn::make('id')
                     ->label('ID')
@@ -42,7 +50,13 @@ class EmployeesTable
                     ->label('Diupdate')
             ])
             ->filters([
-                //
+                SelectFilter::make('gender')
+                    ->label('Jenis Kelamin')
+                    ->options([
+                        'Laki-laki' => 'MALE',
+                        'Perempuan' => 'FEMALE'
+                    ])
+                    ->native(false)
             ])
             ->recordActions([
                 DeleteAction::make(),
