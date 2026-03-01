@@ -16,7 +16,9 @@ class PositionsTable
         return $table
             ->columns([
                 TextColumn::make('id')
-                    ->label('ID'),
+                    ->label('ID')
+                    ->sortable()
+                    ->rowIndex(),
                 TextColumn::make('name')
                     ->label('Nama')
                     ->searchable(),

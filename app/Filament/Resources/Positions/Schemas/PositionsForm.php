@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Positions\Schemas;
 use App\Models\departments;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
 class PositionsForm
@@ -13,15 +14,19 @@ class PositionsForm
     {
         return $schema
             ->components([
-                TextInput::make('name')
-                    ->label('Nama')
-                    ->required(),
-                Select::make('department_id')
-                    ->label('Departemen')
-                    ->options(departments::query()->pluck('name', 'id'))
-                    ->searchable()
-                    ->native(false)
-                    ->required()
+                Section::make('Info Posisi')
+                    ->schema([
+                        TextInput::make('name')
+                            ->label('Nama')
+                            ->required(),
+                        Select::make('department_id')
+                            ->label('Departemen')
+                            ->options(departments::query()->pluck('name', 'id'))
+                            ->searchable()
+                            ->native(false)
+                            ->required()
+                    ])
+                    ->columnSpanFull()
             ]);
     }
 }

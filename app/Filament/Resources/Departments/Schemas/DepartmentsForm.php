@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Departments\Schemas;
 
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
 class DepartmentsForm
@@ -11,12 +12,16 @@ class DepartmentsForm
     {
         return $schema
             ->components([
-                TextInput::make('name')
-                    ->label('Nama')
-                    ->required(),
-                TextInput::make('code')
-                    ->label('Kode')
-                    ->required()
+                Section::make('Info Departemen')
+                    ->schema([
+                        TextInput::make('name')
+                            ->label('Nama')
+                            ->required(),
+                        TextInput::make('code')
+                            ->label('Kode')
+                            ->required()
+                    ])
+                    ->columnSpanFull()
             ]);
     }
 }
