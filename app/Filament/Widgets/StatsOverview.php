@@ -15,32 +15,60 @@ class StatsOverview extends StatsOverviewWidget
 {
     protected function getStats(): array
     {
+
+        $attendanceTotal = attendances::count();
+        $attendancesData = attendances::whereDate('check_in', '>=', now()->subWeek())->count();
+
+        $leavesTotal = leaves::count();
+        $leavesData = leaves::whereDate('created_at', '>=', now()->subWeek())->count();
+
+        $employeesTotal = employees::count();
+        $employeesData = employees::whereDate('user_id', '>=', now()->subWeek())->count();
+
+        $postionsTotal = positions::count();
+        $positionsData = positions::whereDate('created_at', '>=', now()->subWeek())->count();
+
+        $departmentsTotal = departments::count();
+        $departmentsData = departments::whereDate('created_at', '>=', now()->subWeek())->count();
+
+
         return [
-            Stat::make('Absen masuk', attendances::count())
+            // attendance total
+            Stat::make('Absen masuk', $attendanceTotal)
                 ->icon(Heroicon::Briefcase)
-                ->descriptionIcon('heroicon-m-arrow-trending-up')
-                ->descriptionColor('success')
-                ->description(attendances::whereDate('created_at', '>=', now()->subWeek())->count() . ' new this week'),
-            Stat::make('Absen keluar', leaves::count())
+                ->descriptionIcon($attendancesData == 0 ? 'heroicon-m-arrow-trending-down' : 'heroicon-m-arrow-trending-up')
+                ->descriptionColor($attendancesData == 0 ? 'danger' : 'success')
+                ->description($attendancesData == 0 ? "Tidak ada data baru" : "{$attendancesData} data masuk"),
+            // leave total
+            Stat::make('Cuti/izin', $leavesTotal)
                 ->icon(Heroicon::Briefcase)
-                ->descriptionIcon('heroicon-m-arrow-trending-up')
-                ->descriptionColor('success')
-                ->description(leaves::whereDate('created_at', '>=', now()->subWeek())->count() . ' new this week'),
-            Stat::make('Total karyawan', employees::count())
+                ->descriptionIcon($leavesData == 0 ? 'heroicon-m-arrow-trending-down' : 'heroicon-m-arrow-trending-up')
+                ->descriptionColor($leavesData == 0 ? 'danger' : 'success')
+                ->description($leavesData == 0 ? "Tidak ada baru" : "{$leavesData} data masuk"),
+            // employee total
+            Stat::make('Total karyawan', $employeesTotal)
                 ->icon(Heroicon::Users)
-                ->descriptionIcon('heroicon-m-arrow-trending-up')
-                ->descriptionColor('success')
-                ->description(employees::whereDate('created_at', '>=', now()->subWeek())->count() . ' new this week'),
-            Stat::make('Total departemen', departments::count())
-                ->icon(Heroicon::BuildingOffice)
-                ->descriptionIcon('heroicon-m-arrow-trending-up')
-                ->descriptionColor('success')
-                ->description(departments::whereDate('created_at', '>=', now()->subWeek())->count() . ' new this week'),
-            Stat::make('Total posisi', positions::count())
+                ->descriptionIcon($employeesData == 0 ? 'heroicon-m-arrow-trending-down' : 'heroicon-m-arrow-trending-up')
+                ->descriptionColor($employeesData == 0 ? 'danger' : 'success')
+                ->description($employeesData == 0 ? "Tidak ada baru" : "{$employeesData} data masuk"),
+            // position total
+            Stat::make('Total posisi', $postionsTotal)
                 ->icon(Heroicon::Briefcase)
-                ->descriptionIcon('heroicon-m-arrow-trending-up')
-                ->descriptionColor('success')
-                ->description(positions::whereDate('created_at', '>=', now()->subWeek())->count() . ' new this week'),
+                ->descriptionIcon($positionsData == 0 ? 'heroicon-m-arrow-trending-down' : 'heroicon-m-arrow-trending-up')
+                ->descriptionColor($positionsData == 0 ? 'danger' : 'success')
+                ->description($positionsData == 0 ? "Tidak ada baru" : "{$positionsData} data masuk"),
+            // departement total
+            Stat::make('Total departemen', $departmentsTotal)
+                ->icon(Heroicon::BuildingOffice)
+                ->descriptionIcon($departmentsData == 0 ? 'heroicon-m-arrow-trending-down' : 'heroicon-m-arrow-trending-up')
+                ->descriptionColor($departmentsData == 0 ? 'danger' : 'success')
+                ->description($departmentsData == 0 ? "Tidak ada baru" : "{$departmentsData} data masuk"),
+
         ];
+    }
+
+    protected function getColumns(): int|array
+    {
+        return 5; //Set widget in 5 items on 1 row
     }
 }
